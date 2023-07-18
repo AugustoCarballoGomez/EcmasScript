@@ -1,10 +1,10 @@
-const fs = require('fs');
+const fs = require('fs'); //para interacturar con el sistema de archivos
 
 class ProductManager {
   constructor(file) {
     this.products = [];
     this.idProduct = 0;
-    this.path = `${process.cwd()}/files/${file}`;
+    this.path = `${process.cwd()}/files/${file}`; // Se establece la ruta del archivo
   }
 
   getProducts() {
@@ -25,60 +25,59 @@ class ProductManager {
         stock,
       };
 
-      this.products.push(newProduct);
+      this.products.push(newProduct);           // agrega el nuevo producto al arreglo
       await fs.promises.writeFile(this.path, JSON.stringify(this.products));
 
-      return product;
+      return product;   //devuelve el producto arreglado
     } catch (error) {
       console.log(error);
     }
   }
 
   async getProductById(id) {
-    const product = this.products.find((product) => product.id === id);
+    const product = this.products.find((product) => product.id === id); //busca un producto 
 
     try {
-      if (fs.existsSync(this.path)) {
-        const data = await fs.promises.readFile(this.path, 'utf-8');
-        const product = JSON.parse(data);
+      if (fs.existsSync(this.path)) { //verifica si el archivo existe 
+        const data = await fs.promises.readFile(this.path, 'utf-8');  //lee los datos de los archivos
+        const product = JSON.parse(data);   //transforma los datos para leerlo con js
         return product;
       }
-      return [];
+      return [];//si no existe devuelve arreglo vacio
     } catch (error) {
       console.log(error);
     }
   }
 
-//ACTUALIZAR OBJETOS
 
-  async updateProduct(id, updatedData) {
+  async updateProduct(id, updatedData) {  //modificar producto y actualizar 
     try {
-      const product = this.products.find((product) => product.id === id);
+      const product = this.products.find((product) => product.id === id); // busca un producto
       if (!product) {
-        throw new Error(`Producto con ID ${id} no encontrado`);
+        throw new Error(`Producto con ID ${id} no encontrado`); //si no existe el producto sale este error
       }
 
-      const updatedProduct = { id, ...updatedData };
-      const index = this.products.findIndex((product) => product.id === id);
+      const updatedProduct = { id, ...updatedData }; //crea un nuevo objeto actualizado con el id anterior
+      const index = this.products.findIndex((product) => product.id === id);//encuentra el indice del producto a actualizar
       this.products[index] = updatedProduct;
 
-      await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+      await fs.promises.writeFile(this.path, JSON.stringify(this.products));//guarda los productos actualizados en archivo
 
-      return updatedProduct;
-    } catch (error) {
+      return updatedProduct;//retorna el producto actualizado
+    } catch (error) { 
       console.log(error);
     }
   }
-//ELIMINAR
-  async deleteProduct(id) {
+
+  async deleteProduct(id) {     //eliminar productos 
     try {
-      const index = this.products.findIndex((product) => product.id === id);
-      if (index === -1) {
-        throw new Error(`Producto con ID ${id} no encontrado`);
+      const index = this.products.findIndex((product) => product.id === id); //busca un producto en archivo
+      if (index === -1) { 
+        throw new Error(`Producto con ID ${id} no encontrado`); 
       }
 
-      this.products.splice(index, 1);
-      await fs.promises.writeFile(this.path, JSON.stringify(this.products));
+      this.products.splice(index, 1); //se elimina el producto
+      await fs.promises.writeFile(this.path, JSON.stringify(this.products));//guarda en archivo
 
       return id;
     } catch (error) {
