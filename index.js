@@ -88,4 +88,4 @@ class ProductManager {
 }
 
 
-module.exports = ProductManager; 
+module.exports = ProductManager; //permite exportar
