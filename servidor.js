@@ -1,17 +1,10 @@
-const express = require('express');
-const ProductManager = require('./file/ProductManager');
+const express = require("express")
+const port= 3000
+const app = express ()
 
-const app = express();
-const port = 3000;
-
-
-app.listen(port, () => {
-    console.log(`Server running http://slocalhost:${port}`);
-  });
-  
-
-
-app.use(express.json());
+app.listen(port,()=>{
+  console.log("Servidor corriendo ")
+})
 
 
 app.get('/products/:pid', async (req, res) => {
@@ -29,9 +22,5 @@ app.get('/products/:pid', async (req, res) => {
     console.error('Error al obtener el producto:', error);
     res.status(500).json({ message: 'Error del servidor' });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server running http://slocalhost:${port}`);
-});
+})
 
